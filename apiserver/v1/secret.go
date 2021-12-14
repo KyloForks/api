@@ -18,6 +18,7 @@ type Secret struct {
 	// metav1.TypeMeta `json:",inline"`
 
 	// Standard object's metadata.
+	// ywh: API 元数据：公共属性。
 	metav1.ObjectMeta `       json:"metadata,omitempty"`
 	Username          string `json:"username"           gorm:"column:username"  validate:"omitempty"`
 	SecretID          string `json:"secretID"           gorm:"column:secretID"  validate:"omitempty"`
@@ -55,6 +56,7 @@ func (s *Secret) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 // AfterCreate run after create database record.
+// ywh: 通过 gorm 提供的 AfterCreate Hooks 在记录插入数据库之后，生成并更新到数据库的 instanceID 字段。
 func (s *Secret) AfterCreate(tx *gorm.DB) (err error) {
 	s.InstanceID = idutil.GetInstanceID(s.ID, "secret-")
 
